@@ -1,0 +1,10 @@
+# Ignore all markdown files...
+**/*.md
+
+# ...except for README.md files
+!**/README.md
+!**/readme.md
+!**/Readme.md
+
+# Ignore .claude directory
+.claude/

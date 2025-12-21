@@ -1,0 +1,20 @@
+### Represents an organization in the platform.
+### Organizations have their own API keys and settings.
+class: Organization
+table: organization
+
+fields:
+  ### Name of the organization.
+  name: String
+
+  ### Postiz API key for social media posting (encrypted in application logic).
+  postizApiKey: String
+
+  ### Optional Gemini API key for AI content generation (encrypted in application logic).
+  geminiApiKey: String?
+
+  ### JSON serialized organization settings.
+  settings: String
+
+  ### Timestamp when the organization was created.
+  createdAt: DateTime

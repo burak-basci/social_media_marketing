@@ -1,0 +1,63 @@
+### Represents a social media post in the platform.
+### Contains AI-generated content and scheduling information.
+class: Post
+table: post
+
+fields:
+  ### Reference to the organization that owns this post.
+  organizationId: int
+
+  ### Reference to the user who created this post.
+  userId: int
+
+  ### Reference to the company profile this post is for.
+  companyProfileId: int
+
+  ### Optional reference to a specific product.
+  productId: int?
+
+  ### Post title.
+  title: String
+
+  ### Original user prompt for content generation.
+  userPrompt: String
+
+  ### JSON containing AI-generated content for different platforms.
+  aiGeneratedContent: String
+
+  ### Optional JSON containing user-edited content.
+  editedContent: String?
+
+  ### JSON array of selected social media platforms.
+  selectedPlatforms: String
+
+  ### Post status: 'draft', 'scheduled', 'publishing', 'published', or 'failed'.
+  status: String
+
+  ### Optional scheduled publish time.
+  scheduleTime: DateTime?
+
+  ### Optional Postiz post ID after scheduling.
+  postizPostId: String?
+
+  ### Optional JSON data from Postiz webhook.
+  postizWebhookData: String?
+
+  ### Timestamp when the post was created.
+  createdAt: DateTime
+
+  ### Timestamp when the post was last updated.
+  updatedAt: DateTime
+
+  ### Optional timestamp when the post was published.
+  publishedAt: DateTime?
+
+indexes:
+  post_organization_idx:
+    fields: organizationId
+  post_user_idx:
+    fields: userId
+  post_company_profile_idx:
+    fields: companyProfileId
+  post_status_idx:
+    fields: status

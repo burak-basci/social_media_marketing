@@ -1,0 +1,39 @@
+### Represents a company profile within an organization.
+### Contains brand information and uploaded files for content generation.
+class: CompanyProfile
+table: company_profile
+
+fields:
+  ### Reference to the organization that owns this profile.
+  organizationId: int
+
+  ### Company name.
+  name: String
+
+  ### Optional company description.
+  description: String?
+
+  ### Optional brand voice guidelines for AI content generation.
+  brandVoice: String?
+
+  ### List of uploaded file references.
+  uploadedFiles: List<String>?
+
+  ### Optional target audience information.
+  targetAudience: String?
+
+  ### Optional industry classification.
+  industry: String?
+
+  ### List of products associated with this company.
+  products: List<Product>?, !persist
+
+  ### Timestamp when the profile was created.
+  createdAt: DateTime
+
+  ### Timestamp when the profile was last updated.
+  updatedAt: DateTime
+
+indexes:
+  company_profile_organization_idx:
+    fields: organizationId

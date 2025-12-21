@@ -1,0 +1,27 @@
+# Build outputs (keep build/web for Docker)
+.dart_tool/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Git
+.git/
+.gitignore
+
+# Documentation
+*.md
+!README.md
+
+# Test files
+test/
+integration_test/
+
+# Misc
+.DS_Store
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+pubspec.lock

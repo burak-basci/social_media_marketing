@@ -1,0 +1,47 @@
+### Logs all AI interactions for analytics and debugging.
+### Tracks prompts, responses, timing, and costs.
+class: AIInteractionLog
+table: ai_interaction_log
+
+fields:
+  ### Optional reference to the post this interaction is related to.
+  postId: int?
+
+  ### Type of interaction: 'initial_generation', 'edit_request', or 'image_generation'.
+  interactionType: String
+
+  ### The prompt sent to the AI model.
+  prompt: String
+
+  ### The AI model used (e.g., 'gemini-1.5-flash').
+  model: String
+
+  ### JSON containing model parameters (temperature, max_tokens, etc.).
+  parameters: String
+
+  ### JSON containing the raw AI response.
+  rawResponse: String
+
+  ### JSON containing timing breakdown (total_ms, api_call_ms, processing_ms).
+  timingBreakdown: String
+
+  ### Whether the interaction was successful.
+  success: bool
+
+  ### Optional error message if the interaction failed.
+  errorMessage: String?
+
+  ### Timestamp when the interaction occurred.
+  createdAt: DateTime
+
+  ### Optional number of tokens used by the AI model.
+  tokensUsed: int?
+
+  ### Optional estimated cost in USD.
+  estimatedCostUsd: double?
+
+indexes:
+  ai_log_post_idx:
+    fields: postId
+  ai_log_created_at_idx:
+    fields: createdAt

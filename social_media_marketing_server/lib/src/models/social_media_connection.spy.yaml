@@ -1,0 +1,35 @@
+### Represents a connected social media account.
+### Links organization to their social media platforms via Postiz.
+class: SocialMediaConnection
+table: social_media_connection
+
+fields:
+  ### Reference to the organization that owns this connection.
+  organizationId: int
+
+  ### Platform name: 'x', 'facebook', 'instagram', 'linkedin', or 'pinterest'.
+  platform: String
+
+  ### User ID on the social media platform.
+  platformUserId: String
+
+  ### Username on the social media platform.
+  platformUsername: String
+
+  ### Postiz integration ID for this connection.
+  postizIntegrationId: String
+
+  ### Whether this connection is currently active.
+  isActive: bool
+
+  ### Timestamp when the connection was created.
+  createdAt: DateTime
+
+  ### Optional timestamp when the connection was last used.
+  lastUsed: DateTime?
+
+indexes:
+  social_connection_organization_idx:
+    fields: organizationId
+  social_connection_platform_idx:
+    fields: platform

@@ -1,0 +1,33 @@
+### Represents a user in the social media marketing platform.
+### Each user belongs to an organization and has a specific role.
+class: User
+table: user
+
+fields:
+  ### Unique email address for the user.
+  email: String
+
+  ### Hashed password for authentication.
+  passwordHash: String
+
+  ### Full name of the user.
+  fullName: String
+
+  ### Reference to the organization this user belongs to.
+  organizationId: int
+
+  ### User role: 'admin' or 'user'.
+  role: String
+
+  ### Timestamp when the user was created.
+  createdAt: DateTime
+
+  ### Whether the user account is active.
+  isActive: bool
+
+indexes:
+  user_email_idx:
+    fields: email
+    unique: true
+  user_organization_idx:
+    fields: organizationId

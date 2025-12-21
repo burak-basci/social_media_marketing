@@ -1,0 +1,9 @@
+class: PlatformContent
+table: platform_contents
+fields:
+  platform: String
+  content: String?
+  status: String
+  errorMessage: String?
+  characterCount: int?
+  generatedAt: DateTime?

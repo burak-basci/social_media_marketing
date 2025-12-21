@@ -1,0 +1,37 @@
+emailIdp:
+  - login:
+  - startRegistration:
+  - verifyRegistrationCode:
+  - finishRegistration:
+  - startPasswordReset:
+  - verifyPasswordResetCode:
+  - finishPasswordReset:
+jwtRefresh:
+  - refreshAccessToken:
+auth:
+  - register:
+  - login:
+  - logout:
+  - getCurrentUser:
+  - changePassword:
+  - updateProfile:
+campaign:
+  - generateCampaign:
+  - regeneratePlatform:
+  - editPlatformContent:
+company:
+  - listCompanyProfiles:
+  - getCompanyProfile:
+  - createCompanyProfile:
+  - updateCompanyProfile:
+  - deleteCompanyProfile:
+  - getCompanyProducts:
+product:
+  - listProducts:
+  - getProduct:
+  - createProduct:
+  - updateProduct:
+  - deleteProduct:
+  - getProductPosts:
+greeting:
+  - hello:

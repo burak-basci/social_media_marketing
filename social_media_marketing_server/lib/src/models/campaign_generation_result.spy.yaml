@@ -1,0 +1,9 @@
+class: CampaignGenerationResult
+table: campaign_generation_results
+fields:
+  success: bool
+  platformContents: Map<String, String>?
+  imagePrompt: String?
+  postId: int?
+  errorMessage: String?
+  metadata: Map<String, double>?

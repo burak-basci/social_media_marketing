@@ -1,0 +1,30 @@
+### Represents a product associated with a company profile.
+### Products are used to generate targeted marketing content.
+class: Product
+table: product
+
+fields:
+  ### Reference to the company profile this product belongs to.
+  companyProfileId: int
+
+  ### Product name.
+  name: String
+
+  ### Optional product description.
+  description: String?
+
+  ### Optional target audience information.
+  targetAudience: String?
+
+  ### List of key product features.
+  keyFeatures: List<String>?
+
+  ### Optional product category.
+  category: String?
+
+  ### Timestamp when the product was created.
+  createdAt: DateTime
+
+indexes:
+  product_company_profile_idx:
+    fields: companyProfileId

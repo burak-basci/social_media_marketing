@@ -1,0 +1,44 @@
+services:
+  # Development services
+  postgres:
+    image: pgvector/pgvector:pg16
+    ports:
+      - "8090:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: social_media_marketing
+      POSTGRES_PASSWORD: "k3YSvvqo0gwQVCwHCoLklzei-Ht6JsTT"
+    volumes:
+      - social_media_marketing_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:6.2.6
+    ports:
+      - "8091:6379"
+    command: redis-server --requirepass "J2eGOYooMf1NjnQum5kJYXaiI4316NT0"
+    environment:
+      - REDIS_REPLICATION_MODE=master
+
+  # Test services
+  postgres_test:
+    image: pgvector/pgvector:pg16
+    ports:
+      - "9090:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: social_media_marketing_test
+      POSTGRES_PASSWORD: "mh-snlhR66pCTuwaQbZzHfpo2kem_WLt"
+    volumes:
+      - social_media_marketing_test_data:/var/lib/postgresql/data
+
+  redis_test:
+    image: redis:6.2.6
+    ports:
+      - "9091:6379"
+    command: redis-server --requirepass "Sj6onbD3KRw_kDJpE2K159nUJOVqGbN3"
+    environment:
+      - REDIS_REPLICATION_MODE=master
+
+volumes:
+  social_media_marketing_data:
+  social_media_marketing_test_data:
