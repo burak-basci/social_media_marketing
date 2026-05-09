@@ -5,6 +5,11 @@ import '../../features/auth/login_screen.dart';
 import '../../features/auth/register_screen.dart';
 import '../../features/dashboard/dashboard_screen.dart';
 import '../../features/campaign/screens/campaign_wizard_screen.dart';
+import '../../features/calendar/screens/calendar_screen.dart';
+import '../../features/connections/screens/connections_screen.dart';
+import '../../features/logs/screens/ai_logs_screen.dart';
+import '../../features/posts/screens/posts_screen.dart';
+import '../../features/settings/screens/settings_screen.dart';
 import '../../shared/layouts/main_layout.dart';
 import '../../services/auth_service.dart';
 
@@ -87,50 +92,35 @@ class AppRouter {
         path: AppRoutes.calendar,
         pageBuilder: (context, state) => NoTransitionPage(
           key: state.pageKey,
-          child: const _PlaceholderScreen(
-            title: 'Calendar',
-            selectedIndex: 2,
-          ),
+          child: const CalendarScreen(),
         ),
       ),
       GoRoute(
         path: AppRoutes.posts,
         pageBuilder: (context, state) => NoTransitionPage(
           key: state.pageKey,
-          child: const _PlaceholderScreen(
-            title: 'Posts',
-            selectedIndex: 3,
-          ),
+          child: const PostsScreen(),
         ),
       ),
       GoRoute(
         path: AppRoutes.connections,
         pageBuilder: (context, state) => NoTransitionPage(
           key: state.pageKey,
-          child: const _PlaceholderScreen(
-            title: 'Connections',
-            selectedIndex: 4,
-          ),
+          child: const ConnectionsScreen(),
         ),
       ),
       GoRoute(
         path: AppRoutes.settings,
         pageBuilder: (context, state) => NoTransitionPage(
           key: state.pageKey,
-          child: const _PlaceholderScreen(
-            title: 'Settings',
-            selectedIndex: 5,
-          ),
+          child: const SettingsScreen(),
         ),
       ),
       GoRoute(
         path: AppRoutes.logs,
         pageBuilder: (context, state) => NoTransitionPage(
           key: state.pageKey,
-          child: const _PlaceholderScreen(
-            title: 'AI Logs',
-            selectedIndex: 6,
-          ),
+          child: const AILogsScreen(),
         ),
       ),
     ],

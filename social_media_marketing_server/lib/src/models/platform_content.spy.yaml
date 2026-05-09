@@ -1,5 +1,4 @@
 class: PlatformContent
-table: platform_contents
 fields:
   platform: String
   content: String?

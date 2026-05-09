@@ -7,6 +7,7 @@ import '../widgets/step1_company_product.dart';
 import '../widgets/step2_ai_generation.dart';
 import '../widgets/step3_review_edit.dart';
 import '../widgets/step4_schedule.dart';
+import '../widgets/bulk_import_panel.dart';
 
 /// Main Campaign Creation Wizard Screen
 /// Manages the 4-step process: Company/Product → AI Generation → Review/Edit → Schedule/Publish
@@ -34,33 +35,85 @@ class _CampaignWizardScreenState extends State<CampaignWizardScreen> {
       },
       child: Consumer<CampaignProvider>(
         builder: (context, campaign, child) {
-          // Track unsaved changes
           _hasUnsavedChanges = campaign.currentStep > 0;
 
+          final isDesktop = MediaQuery.of(context).size.width >= 900;
+
           return MainLayout(
-            selectedIndex: 1, // Campaign tab
-            child: Column(
-              children: [
-                // Step indicator at the top
-                StepIndicator(
-                  currentStep: campaign.currentStep,
-                  totalSteps: 4,
-                ),
-
-                // Current step widget
-                Expanded(
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.all(24.0),
-                    child: _buildCurrentStep(campaign.currentStep),
-                  ),
-                ),
-
-                // Navigation buttons at the bottom
-                _buildNavigationButtons(context, campaign),
-              ],
+            selectedIndex: 1,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: isDesktop
+                  ? _buildDesktopLayout(context, campaign)
+                  : _buildMobileLayout(context, campaign),
             ),
           );
         },
+      ),
+    );
+  }
+
+  /// Desktop: Form panel (left, rounded all sides) + fixed Bulk Import panel (right)
+  Widget _buildDesktopLayout(BuildContext context, CampaignProvider campaign) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Left: scrollable form wrapped in a fully-rounded card
+        Expanded(
+          flex: 3,
+          child: _buildFormPanel(context, campaign),
+        ),
+
+        const SizedBox(width: 16),
+
+        // Right: fixed Bulk Import panel (does NOT scroll with the form)
+        const SizedBox(
+          width: 320,
+          child: BulkImportPanel(),
+        ),
+      ],
+    );
+  }
+
+  /// Mobile: only the form panel (no Bulk Import sidebar)
+  Widget _buildMobileLayout(BuildContext context, CampaignProvider campaign) {
+    return _buildFormPanel(context, campaign);
+  }
+
+  /// The wizard form: StepIndicator + scrollable content + navigation buttons,
+  /// wrapped in a ClipRRect so ALL corners (top AND bottom) are rounded.
+  Widget _buildFormPanel(BuildContext context, CampaignProvider campaign) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: Theme.of(context).dividerColor,
+            width: 1,
+          ),
+        ),
+        child: Column(
+          children: [
+            // Step indicator at the top
+            StepIndicator(
+              currentStep: campaign.currentStep,
+              totalSteps: 4,
+            ),
+
+            // Current step widget
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(24.0),
+                child: _buildCurrentStep(campaign.currentStep),
+              ),
+            ),
+
+            // Navigation buttons — bottom of the panel, corners clipped by parent
+            _buildNavigationButtons(context, campaign),
+          ],
+        ),
       ),
     );
   }
@@ -122,21 +175,17 @@ class _CampaignWizardScreenState extends State<CampaignWizardScreen> {
 
   /// Handle next step navigation with validation
   Future<void> _handleNextStep(BuildContext context, CampaignProvider campaign) async {
-    // Handle step-specific actions
     switch (campaign.currentStep) {
-      case 0: // Company & Product → AI Generation
+      case 0:
         campaign.nextStep();
         break;
-
-      case 1: // AI Generation → Review & Edit
+      case 1:
         await _handleGeneration(context, campaign);
         break;
-
-      case 2: // Review & Edit → Schedule
+      case 2:
         campaign.nextStep();
         break;
-
-      case 3: // Schedule → Publish/Schedule
+      case 3:
         await _handlePublish(context, campaign);
         break;
     }
@@ -156,23 +205,16 @@ class _CampaignWizardScreenState extends State<CampaignWizardScreen> {
 
   /// Handle publish/schedule
   Future<void> _handlePublish(BuildContext context, CampaignProvider campaign) async {
-    // Show confirmation dialog
     final confirmed = await _showPublishConfirmation(context, campaign);
     if (confirmed != true) return;
 
     try {
       if (!campaign.publishNow) {
-        // Schedule for later
-        // TODO: Call backend to schedule post
-        // await client.post.schedulePost(campaign.postId!, campaign.scheduleTime!);
         if (context.mounted) {
           _showSuccess(context, 'Post scheduled successfully!');
           Navigator.of(context).pushReplacementNamed('/calendar');
         }
       } else {
-        // Publish now
-        // TODO: Call backend to publish now
-        // await client.post.publishNow(campaign.postId!);
         if (context.mounted) {
           _showSuccess(context, 'Post published successfully!');
           Navigator.of(context).pushReplacementNamed('/calendar');
@@ -185,7 +227,6 @@ class _CampaignWizardScreenState extends State<CampaignWizardScreen> {
     }
   }
 
-  /// Get icon for next step button
   IconData _getNextStepIcon(int currentStep) {
     switch (currentStep) {
       case 0:
@@ -201,7 +242,6 @@ class _CampaignWizardScreenState extends State<CampaignWizardScreen> {
     }
   }
 
-  /// Get label for next step button
   String _getNextStepLabel(int currentStep) {
     switch (currentStep) {
       case 0:
@@ -217,7 +257,6 @@ class _CampaignWizardScreenState extends State<CampaignWizardScreen> {
     }
   }
 
-  /// Show exit confirmation dialog
   Future<bool?> _showExitConfirmation(BuildContext context) {
     return showDialog<bool>(
       context: context,
@@ -240,7 +279,6 @@ class _CampaignWizardScreenState extends State<CampaignWizardScreen> {
     );
   }
 
-  /// Show publish confirmation dialog
   Future<bool?> _showPublishConfirmation(BuildContext context, CampaignProvider campaign) {
     final action = !campaign.publishNow ? 'schedule' : 'publish';
     final platforms = campaign.selectedPlatforms.join(', ');
@@ -268,7 +306,6 @@ class _CampaignWizardScreenState extends State<CampaignWizardScreen> {
     );
   }
 
-  /// Show error message
   void _showError(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -279,7 +316,6 @@ class _CampaignWizardScreenState extends State<CampaignWizardScreen> {
     );
   }
 
-  /// Show success message
   void _showSuccess(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(

@@ -21,15 +21,19 @@ import 'post.dart' as _i8;
 import 'product.dart' as _i9;
 import 'social_media_connection.dart' as _i10;
 import 'user.dart' as _i11;
-import 'package:social_media_marketing_client/src/protocol/company_profile.dart'
+import 'package:social_media_marketing_client/src/protocol/ai_interaction_log.dart'
     as _i12;
-import 'package:social_media_marketing_client/src/protocol/product.dart'
+import 'package:social_media_marketing_client/src/protocol/company_profile.dart'
     as _i13;
-import 'package:social_media_marketing_client/src/protocol/post.dart' as _i14;
-import 'package:serverpod_auth_idp_client/serverpod_auth_idp_client.dart'
+import 'package:social_media_marketing_client/src/protocol/product.dart'
+    as _i14;
+import 'package:social_media_marketing_client/src/protocol/social_media_connection.dart'
     as _i15;
+import 'package:social_media_marketing_client/src/protocol/post.dart' as _i16;
+import 'package:serverpod_auth_idp_client/serverpod_auth_idp_client.dart'
+    as _i17;
 import 'package:serverpod_auth_core_client/serverpod_auth_core_client.dart'
-    as _i16;
+    as _i18;
 export 'ai_interaction_log.dart';
 export 'campaign_generation_result.dart';
 export 'company_profile.dart';
@@ -187,12 +191,24 @@ class Protocol extends _i1.SerializationManager {
               : null)
           as T;
     }
+    if (t == List<_i12.AIInteractionLog>) {
+      return (data as List)
+              .map((e) => deserialize<_i12.AIInteractionLog>(e))
+              .toList()
+          as T;
+    }
+    if (t == Map<String, dynamic>) {
+      return (data as Map).map(
+            (k, v) => MapEntry(deserialize<String>(k), deserialize<dynamic>(v)),
+          )
+          as T;
+    }
     if (t == List<String>) {
       return (data as List).map((e) => deserialize<String>(e)).toList() as T;
     }
-    if (t == List<_i12.CompanyProfile>) {
+    if (t == List<_i13.CompanyProfile>) {
       return (data as List)
-              .map((e) => deserialize<_i12.CompanyProfile>(e))
+              .map((e) => deserialize<_i13.CompanyProfile>(e))
               .toList()
           as T;
     }
@@ -202,18 +218,45 @@ class Protocol extends _i1.SerializationManager {
               : null)
           as T;
     }
-    if (t == List<_i13.Product>) {
-      return (data as List).map((e) => deserialize<_i13.Product>(e)).toList()
+    if (t == List<_i14.Product>) {
+      return (data as List).map((e) => deserialize<_i14.Product>(e)).toList()
           as T;
     }
-    if (t == List<_i14.Post>) {
-      return (data as List).map((e) => deserialize<_i14.Post>(e)).toList() as T;
+    if (t == List<_i15.SocialMediaConnection>) {
+      return (data as List)
+              .map((e) => deserialize<_i15.SocialMediaConnection>(e))
+              .toList()
+          as T;
+    }
+    if (t == Map<String, bool>) {
+      return (data as Map).map(
+            (k, v) => MapEntry(deserialize<String>(k), deserialize<bool>(v)),
+          )
+          as T;
+    }
+    if (t == List<_i16.Post>) {
+      return (data as List).map((e) => deserialize<_i16.Post>(e)).toList() as T;
+    }
+    if (t == Map<String, String>) {
+      return (data as Map).map(
+            (k, v) => MapEntry(deserialize<String>(k), deserialize<String>(v)),
+          )
+          as T;
+    }
+    if (t == _i1.getType<Map<String, String>?>()) {
+      return (data != null
+              ? (data as Map).map(
+                  (k, v) =>
+                      MapEntry(deserialize<String>(k), deserialize<String>(v)),
+                )
+              : null)
+          as T;
     }
     try {
-      return _i15.Protocol().deserialize<T>(data, t);
+      return _i17.Protocol().deserialize<T>(data, t);
     } on _i1.DeserializationTypeNotFoundException catch (_) {}
     try {
-      return _i16.Protocol().deserialize<T>(data, t);
+      return _i18.Protocol().deserialize<T>(data, t);
     } on _i1.DeserializationTypeNotFoundException catch (_) {}
     return super.deserialize<T>(data, t);
   }
@@ -268,11 +311,11 @@ class Protocol extends _i1.SerializationManager {
       case _i11.User():
         return 'User';
     }
-    className = _i15.Protocol().getClassNameForObject(data);
+    className = _i17.Protocol().getClassNameForObject(data);
     if (className != null) {
       return 'serverpod_auth_idp.$className';
     }
-    className = _i16.Protocol().getClassNameForObject(data);
+    className = _i18.Protocol().getClassNameForObject(data);
     if (className != null) {
       return 'serverpod_auth_core.$className';
     }
@@ -317,11 +360,11 @@ class Protocol extends _i1.SerializationManager {
     }
     if (dataClassName.startsWith('serverpod_auth_idp.')) {
       data['className'] = dataClassName.substring(19);
-      return _i15.Protocol().deserializeByClassName(data);
+      return _i17.Protocol().deserializeByClassName(data);
     }
     if (dataClassName.startsWith('serverpod_auth_core.')) {
       data['className'] = dataClassName.substring(20);
-      return _i16.Protocol().deserializeByClassName(data);
+      return _i18.Protocol().deserializeByClassName(data);
     }
     return super.deserializeByClassName(data);
   }

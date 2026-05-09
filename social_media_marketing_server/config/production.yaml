@@ -30,10 +30,10 @@ webServer:
 # If you are connecting on a public IP (e.g. on AWS or Google Cloud Run), you
 # connect on the public IP of the database e.g. database.examplepod.com.
 database:
-  host: postgres
+  host: postgresql
   port: 5432
-  name: social_media_marketing
-  user: postgres
+  name: smm
+  user: smm
   requireSsl: false
   #isUnixSocket: true # defaults to false
   #maxConnectionCount: 10 # Defaults to 10, a negative or null value removes the limit

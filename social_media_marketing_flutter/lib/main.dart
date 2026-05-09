@@ -7,6 +7,11 @@ import 'services/auth_service.dart';
 import 'config/app_config.dart';
 import 'features/campaign/providers/campaign_provider.dart';
 import 'features/campaign/providers/company_provider.dart';
+import 'features/calendar/providers/calendar_provider.dart';
+import 'features/connections/providers/connections_provider.dart';
+import 'features/logs/providers/ai_logs_provider.dart';
+import 'features/posts/providers/posts_provider.dart';
+import 'features/settings/providers/settings_provider.dart';
 
 /// Main entry point for the Social Media Marketing application
 void main() async {
@@ -40,6 +45,11 @@ class SocialMediaMarketingApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => CampaignProvider()),
         ChangeNotifierProvider(create: (_) => CompanyProvider()),
+        ChangeNotifierProvider(create: (_) => CalendarProvider()),
+        ChangeNotifierProvider(create: (_) => ConnectionsProvider()),
+        ChangeNotifierProvider(create: (_) => AILogsProvider()),
+        ChangeNotifierProvider(create: (_) => PostsProvider()),
+        ChangeNotifierProvider(create: (_) => SettingsProvider()),
       ],
       child: MaterialApp.router(
         title: 'Social Media Marketing',

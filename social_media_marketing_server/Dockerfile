@@ -1,5 +1,5 @@
 # Build stage
-FROM dart:3.8.0 AS build
+FROM docker.io/dart:3.8.0 AS build
 WORKDIR /app
 COPY . .
 
@@ -8,7 +8,7 @@ RUN dart pub get
 RUN dart compile exe bin/main.dart -o bin/server
 
 # Final stage
-FROM alpine:latest
+FROM docker.io/alpine:latest
 
 # Environment variables
 ENV runmode=production

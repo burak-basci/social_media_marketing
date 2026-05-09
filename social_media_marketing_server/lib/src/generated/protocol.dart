@@ -26,11 +26,15 @@ import 'post.dart' as _i11;
 import 'product.dart' as _i12;
 import 'social_media_connection.dart' as _i13;
 import 'user.dart' as _i14;
-import 'package:social_media_marketing_server/src/generated/company_profile.dart'
+import 'package:social_media_marketing_server/src/generated/ai_interaction_log.dart'
     as _i15;
-import 'package:social_media_marketing_server/src/generated/product.dart'
+import 'package:social_media_marketing_server/src/generated/company_profile.dart'
     as _i16;
-import 'package:social_media_marketing_server/src/generated/post.dart' as _i17;
+import 'package:social_media_marketing_server/src/generated/product.dart'
+    as _i17;
+import 'package:social_media_marketing_server/src/generated/social_media_connection.dart'
+    as _i18;
+import 'package:social_media_marketing_server/src/generated/post.dart' as _i19;
 export 'ai_interaction_log.dart';
 export 'campaign_generation_result.dart';
 export 'company_profile.dart';
@@ -176,75 +180,6 @@ class Protocol extends _i1.SerializationManagerServer {
           type: 'btree',
           isUnique: false,
           isPrimary: false,
-        ),
-      ],
-      managed: true,
-    ),
-    _i2.TableDefinition(
-      name: 'campaign_generation_results',
-      dartName: 'CampaignGenerationResult',
-      schema: 'public',
-      module: 'social_media_marketing',
-      columns: [
-        _i2.ColumnDefinition(
-          name: 'id',
-          columnType: _i2.ColumnType.bigint,
-          isNullable: false,
-          dartType: 'int?',
-          columnDefault:
-              'nextval(\'campaign_generation_results_id_seq\'::regclass)',
-        ),
-        _i2.ColumnDefinition(
-          name: 'success',
-          columnType: _i2.ColumnType.boolean,
-          isNullable: false,
-          dartType: 'bool',
-        ),
-        _i2.ColumnDefinition(
-          name: 'platformContents',
-          columnType: _i2.ColumnType.json,
-          isNullable: true,
-          dartType: 'Map<String,String>?',
-        ),
-        _i2.ColumnDefinition(
-          name: 'imagePrompt',
-          columnType: _i2.ColumnType.text,
-          isNullable: true,
-          dartType: 'String?',
-        ),
-        _i2.ColumnDefinition(
-          name: 'postId',
-          columnType: _i2.ColumnType.bigint,
-          isNullable: true,
-          dartType: 'int?',
-        ),
-        _i2.ColumnDefinition(
-          name: 'errorMessage',
-          columnType: _i2.ColumnType.text,
-          isNullable: true,
-          dartType: 'String?',
-        ),
-        _i2.ColumnDefinition(
-          name: 'metadata',
-          columnType: _i2.ColumnType.json,
-          isNullable: true,
-          dartType: 'Map<String,double>?',
-        ),
-      ],
-      foreignKeys: [],
-      indexes: [
-        _i2.IndexDefinition(
-          indexName: 'campaign_generation_results_pkey',
-          tableSpace: null,
-          elements: [
-            _i2.IndexElementDefinition(
-              type: _i2.IndexElementDefinitionType.column,
-              definition: 'id',
-            ),
-          ],
-          type: 'btree',
-          isUnique: true,
-          isPrimary: true,
         ),
       ],
       managed: true,
@@ -396,74 +331,6 @@ class Protocol extends _i1.SerializationManagerServer {
       indexes: [
         _i2.IndexDefinition(
           indexName: 'organization_pkey',
-          tableSpace: null,
-          elements: [
-            _i2.IndexElementDefinition(
-              type: _i2.IndexElementDefinitionType.column,
-              definition: 'id',
-            ),
-          ],
-          type: 'btree',
-          isUnique: true,
-          isPrimary: true,
-        ),
-      ],
-      managed: true,
-    ),
-    _i2.TableDefinition(
-      name: 'platform_contents',
-      dartName: 'PlatformContent',
-      schema: 'public',
-      module: 'social_media_marketing',
-      columns: [
-        _i2.ColumnDefinition(
-          name: 'id',
-          columnType: _i2.ColumnType.bigint,
-          isNullable: false,
-          dartType: 'int?',
-          columnDefault: 'nextval(\'platform_contents_id_seq\'::regclass)',
-        ),
-        _i2.ColumnDefinition(
-          name: 'platform',
-          columnType: _i2.ColumnType.text,
-          isNullable: false,
-          dartType: 'String',
-        ),
-        _i2.ColumnDefinition(
-          name: 'content',
-          columnType: _i2.ColumnType.text,
-          isNullable: true,
-          dartType: 'String?',
-        ),
-        _i2.ColumnDefinition(
-          name: 'status',
-          columnType: _i2.ColumnType.text,
-          isNullable: false,
-          dartType: 'String',
-        ),
-        _i2.ColumnDefinition(
-          name: 'errorMessage',
-          columnType: _i2.ColumnType.text,
-          isNullable: true,
-          dartType: 'String?',
-        ),
-        _i2.ColumnDefinition(
-          name: 'characterCount',
-          columnType: _i2.ColumnType.bigint,
-          isNullable: true,
-          dartType: 'int?',
-        ),
-        _i2.ColumnDefinition(
-          name: 'generatedAt',
-          columnType: _i2.ColumnType.timestampWithoutTimeZone,
-          isNullable: true,
-          dartType: 'DateTime?',
-        ),
-      ],
-      foreignKeys: [],
-      indexes: [
-        _i2.IndexDefinition(
-          indexName: 'platform_contents_pkey',
           tableSpace: null,
           elements: [
             _i2.IndexElementDefinition(
@@ -1095,12 +962,24 @@ class Protocol extends _i1.SerializationManagerServer {
               : null)
           as T;
     }
+    if (t == List<_i15.AIInteractionLog>) {
+      return (data as List)
+              .map((e) => deserialize<_i15.AIInteractionLog>(e))
+              .toList()
+          as T;
+    }
+    if (t == Map<String, dynamic>) {
+      return (data as Map).map(
+            (k, v) => MapEntry(deserialize<String>(k), deserialize<dynamic>(v)),
+          )
+          as T;
+    }
     if (t == List<String>) {
       return (data as List).map((e) => deserialize<String>(e)).toList() as T;
     }
-    if (t == List<_i15.CompanyProfile>) {
+    if (t == List<_i16.CompanyProfile>) {
       return (data as List)
-              .map((e) => deserialize<_i15.CompanyProfile>(e))
+              .map((e) => deserialize<_i16.CompanyProfile>(e))
               .toList()
           as T;
     }
@@ -1110,12 +989,39 @@ class Protocol extends _i1.SerializationManagerServer {
               : null)
           as T;
     }
-    if (t == List<_i16.Product>) {
-      return (data as List).map((e) => deserialize<_i16.Product>(e)).toList()
+    if (t == List<_i17.Product>) {
+      return (data as List).map((e) => deserialize<_i17.Product>(e)).toList()
           as T;
     }
-    if (t == List<_i17.Post>) {
-      return (data as List).map((e) => deserialize<_i17.Post>(e)).toList() as T;
+    if (t == List<_i18.SocialMediaConnection>) {
+      return (data as List)
+              .map((e) => deserialize<_i18.SocialMediaConnection>(e))
+              .toList()
+          as T;
+    }
+    if (t == Map<String, bool>) {
+      return (data as Map).map(
+            (k, v) => MapEntry(deserialize<String>(k), deserialize<bool>(v)),
+          )
+          as T;
+    }
+    if (t == List<_i19.Post>) {
+      return (data as List).map((e) => deserialize<_i19.Post>(e)).toList() as T;
+    }
+    if (t == Map<String, String>) {
+      return (data as Map).map(
+            (k, v) => MapEntry(deserialize<String>(k), deserialize<String>(v)),
+          )
+          as T;
+    }
+    if (t == _i1.getType<Map<String, String>?>()) {
+      return (data != null
+              ? (data as Map).map(
+                  (k, v) =>
+                      MapEntry(deserialize<String>(k), deserialize<String>(v)),
+                )
+              : null)
+          as T;
     }
     try {
       return _i3.Protocol().deserialize<T>(data, t);
@@ -1268,14 +1174,10 @@ class Protocol extends _i1.SerializationManagerServer {
     switch (t) {
       case _i5.AIInteractionLog:
         return _i5.AIInteractionLog.t;
-      case _i6.CampaignGenerationResult:
-        return _i6.CampaignGenerationResult.t;
       case _i7.CompanyProfile:
         return _i7.CompanyProfile.t;
       case _i9.Organization:
         return _i9.Organization.t;
-      case _i10.PlatformContent:
-        return _i10.PlatformContent.t;
       case _i11.Post:
         return _i11.Post.t;
       case _i12.Product:

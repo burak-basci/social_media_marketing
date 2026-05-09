@@ -14,7 +14,6 @@ import 'package:serverpod_client/serverpod_client.dart' as _i1;
 
 abstract class PlatformContent implements _i1.SerializableModel {
   PlatformContent._({
-    this.id,
     required this.platform,
     this.content,
     required this.status,
@@ -24,7 +23,6 @@ abstract class PlatformContent implements _i1.SerializableModel {
   });
 
   factory PlatformContent({
-    int? id,
     required String platform,
     String? content,
     required String status,
@@ -35,7 +33,6 @@ abstract class PlatformContent implements _i1.SerializableModel {
 
   factory PlatformContent.fromJson(Map<String, dynamic> jsonSerialization) {
     return PlatformContent(
-      id: jsonSerialization['id'] as int?,
       platform: jsonSerialization['platform'] as String,
       content: jsonSerialization['content'] as String?,
       status: jsonSerialization['status'] as String,
@@ -48,11 +45,6 @@ abstract class PlatformContent implements _i1.SerializableModel {
             ),
     );
   }
-
-  /// The database id, set if the object has been inserted into the
-  /// database or if it has been fetched from the database. Otherwise,
-  /// the id will be null.
-  int? id;
 
   String platform;
 
@@ -70,7 +62,6 @@ abstract class PlatformContent implements _i1.SerializableModel {
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   PlatformContent copyWith({
-    int? id,
     String? platform,
     String? content,
     String? status,
@@ -82,7 +73,6 @@ abstract class PlatformContent implements _i1.SerializableModel {
   Map<String, dynamic> toJson() {
     return {
       '__className__': 'PlatformContent',
-      if (id != null) 'id': id,
       'platform': platform,
       if (content != null) 'content': content,
       'status': status,
@@ -102,7 +92,6 @@ class _Undefined {}
 
 class _PlatformContentImpl extends PlatformContent {
   _PlatformContentImpl({
-    int? id,
     required String platform,
     String? content,
     required String status,
@@ -110,7 +99,6 @@ class _PlatformContentImpl extends PlatformContent {
     int? characterCount,
     DateTime? generatedAt,
   }) : super._(
-         id: id,
          platform: platform,
          content: content,
          status: status,
@@ -124,7 +112,6 @@ class _PlatformContentImpl extends PlatformContent {
   @_i1.useResult
   @override
   PlatformContent copyWith({
-    Object? id = _Undefined,
     String? platform,
     Object? content = _Undefined,
     String? status,
@@ -133,7 +120,6 @@ class _PlatformContentImpl extends PlatformContent {
     Object? generatedAt = _Undefined,
   }) {
     return PlatformContent(
-      id: id is int? ? id : this.id,
       platform: platform ?? this.platform,
       content: content is String? ? content : this.content,
       status: status ?? this.status,

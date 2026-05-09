@@ -1,6 +1,6 @@
 # Use pre-built files approach
 # Build the Flutter app first with: flutter build web --release
-FROM nginx:alpine
+FROM docker.io/nginx:alpine
 
 # Copy pre-built web files
 COPY build/web /usr/share/nginx/html

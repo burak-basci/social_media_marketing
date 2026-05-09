@@ -16,18 +16,25 @@ import 'package:serverpod_client/serverpod_client.dart' as _i2;
 import 'dart:async' as _i3;
 import 'package:serverpod_auth_core_client/serverpod_auth_core_client.dart'
     as _i4;
-import 'package:social_media_marketing_client/src/protocol/user.dart' as _i5;
+import 'package:social_media_marketing_client/src/protocol/ai_interaction_log.dart'
+    as _i5;
+import 'package:social_media_marketing_client/src/protocol/user.dart' as _i6;
 import 'package:social_media_marketing_client/src/protocol/campaign_generation_result.dart'
-    as _i6;
-import 'package:social_media_marketing_client/src/protocol/platform_content.dart'
-    as _i6a;
-import 'package:social_media_marketing_client/src/protocol/company_profile.dart'
     as _i7;
-import 'package:social_media_marketing_client/src/protocol/product.dart' as _i8;
-import 'package:social_media_marketing_client/src/protocol/post.dart' as _i9;
-import 'package:social_media_marketing_client/src/protocol/greetings/greeting.dart'
+import 'package:social_media_marketing_client/src/protocol/platform_content.dart'
+    as _i8;
+import 'package:social_media_marketing_client/src/protocol/company_profile.dart'
+    as _i9;
+import 'package:social_media_marketing_client/src/protocol/product.dart'
     as _i10;
-import 'protocol.dart' as _i11;
+import 'package:social_media_marketing_client/src/protocol/social_media_connection.dart'
+    as _i11;
+import 'package:social_media_marketing_client/src/protocol/post.dart' as _i12;
+import 'package:social_media_marketing_client/src/protocol/organization.dart'
+    as _i13;
+import 'package:social_media_marketing_client/src/protocol/greetings/greeting.dart'
+    as _i14;
+import 'protocol.dart' as _i15;
 
 /// By extending [EmailIdpBaseEndpoint], the email identity provider endpoints
 /// are made available on the server and enable the corresponding sign-in widget
@@ -243,6 +250,137 @@ class EndpointJwtRefresh extends _i4.EndpointRefreshJwtTokens {
   );
 }
 
+/// Endpoint for viewing AI interaction logs.
+///
+/// Provides read-only access to AI interaction history with filtering and pagination.
+/// Logs are linked to posts, and access is controlled through post ownership.
+/// {@category Endpoint}
+class EndpointAILogs extends _i2.EndpointRef {
+  EndpointAILogs(_i2.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'aILogs';
+
+  /// Lists AI interaction logs with optional filtering.
+  ///
+  /// Parameters:
+  /// - [userId] - User making the request (for access control)
+  /// - [limit] - Max number of logs to return (default: 50, max: 200)
+  /// - [offset] - Pagination offset (default: 0)
+  /// - [interactionType] - Filter by type (initial_generation, edit_request, image_generation)
+  /// - [startDate] - Filter logs after this date
+  /// - [endDate] - Filter logs before this date
+  /// - [postId] - Optional filter by specific post
+  ///
+  /// Returns: List of AIInteractionLog objects ordered by timestamp DESC
+  ///
+  /// Throws:
+  /// - [Exception] if user not found
+  _i3.Future<List<_i5.AIInteractionLog>> getLogs({
+    required int userId,
+    int? limit,
+    int? offset,
+    String? interactionType,
+    DateTime? startDate,
+    DateTime? endDate,
+    int? postId,
+  }) => caller.callServerEndpoint<List<_i5.AIInteractionLog>>(
+    'aILogs',
+    'getLogs',
+    {
+      'userId': userId,
+      'limit': limit,
+      'offset': offset,
+      'interactionType': interactionType,
+      'startDate': startDate,
+      'endDate': endDate,
+      'postId': postId,
+    },
+  );
+
+  /// Gets total cost of AI interactions for a user.
+  ///
+  /// Calculates the sum of all AI interaction costs for posts owned by the user.
+  ///
+  /// Parameters:
+  /// - [userId] - User making the request
+  /// - [startDate] - Include logs after this date
+  /// - [endDate] - Include logs before this date
+  /// - [postId] - Optional filter by specific post
+  ///
+  /// Returns: Total cost in USD
+  ///
+  /// Throws:
+  /// - [Exception] if user not found
+  _i3.Future<double> getTotalCost({
+    required int userId,
+    DateTime? startDate,
+    DateTime? endDate,
+    int? postId,
+  }) => caller.callServerEndpoint<double>(
+    'aILogs',
+    'getTotalCost',
+    {
+      'userId': userId,
+      'startDate': startDate,
+      'endDate': endDate,
+      'postId': postId,
+    },
+  );
+
+  /// Gets detailed information about a specific log entry.
+  ///
+  /// Verifies that the user has access to the post associated with this log.
+  ///
+  /// Parameters:
+  /// - [userId] - User making the request (for access control)
+  /// - [logId] - ID of the log to retrieve
+  ///
+  /// Returns: AIInteractionLog or null if not found/not authorized
+  ///
+  /// Throws:
+  /// - [Exception] if unauthorized access attempt
+  _i3.Future<_i5.AIInteractionLog?> getLog({
+    required int userId,
+    required int logId,
+  }) => caller.callServerEndpoint<_i5.AIInteractionLog?>(
+    'aILogs',
+    'getLog',
+    {
+      'userId': userId,
+      'logId': logId,
+    },
+  );
+
+  /// Gets statistics about AI usage for a user.
+  ///
+  /// Returns aggregated data including:
+  /// - Total interactions
+  /// - Total cost
+  /// - Breakdown by interaction type
+  /// - Average cost per interaction
+  ///
+  /// Parameters:
+  /// - [userId] - User making the request
+  /// - [startDate] - Include logs after this date
+  /// - [endDate] - Include logs before this date
+  ///
+  /// Returns: Map with statistics
+  _i3.Future<Map<String, dynamic>> getStatistics({
+    required int userId,
+    DateTime? startDate,
+    DateTime? endDate,
+  }) => caller.callServerEndpoint<Map<String, dynamic>>(
+    'aILogs',
+    'getStatistics',
+    {
+      'userId': userId,
+      'startDate': startDate,
+      'endDate': endDate,
+    },
+  );
+}
+
 /// Authentication endpoint for user registration, login, and session management.
 ///
 /// Provides secure authentication with bcrypt password hashing and
@@ -287,12 +425,12 @@ class EndpointAuth extends _i2.EndpointRef {
   /// Throws:
   /// - [Exception] if email already exists
   /// - [Exception] if validation fails
-  _i3.Future<_i5.User> register({
+  _i3.Future<_i6.User> register({
     required String email,
     required String password,
     required String fullName,
     required String organizationName,
-  }) => caller.callServerEndpoint<_i5.User>(
+  }) => caller.callServerEndpoint<_i6.User>(
     'auth',
     'register',
     {
@@ -317,10 +455,10 @@ class EndpointAuth extends _i2.EndpointRef {
   /// Throws:
   /// - [Exception] if credentials are invalid
   /// - [Exception] if account is inactive
-  _i3.Future<_i5.User> login({
+  _i3.Future<_i6.User> login({
     required String email,
     required String password,
-  }) => caller.callServerEndpoint<_i5.User>(
+  }) => caller.callServerEndpoint<_i6.User>(
     'auth',
     'login',
     {
@@ -349,8 +487,8 @@ class EndpointAuth extends _i2.EndpointRef {
   ///
   /// Throws:
   /// - [Exception] if user not found
-  _i3.Future<_i5.User> getCurrentUser({required int userId}) =>
-      caller.callServerEndpoint<_i5.User>(
+  _i3.Future<_i6.User> getCurrentUser({required int userId}) =>
+      caller.callServerEndpoint<_i6.User>(
         'auth',
         'getCurrentUser',
         {'userId': userId},
@@ -392,11 +530,11 @@ class EndpointAuth extends _i2.EndpointRef {
   /// - [email] - Optional new email (must be unique)
   ///
   /// Returns: Updated [User] object
-  _i3.Future<_i5.User> updateProfile({
+  _i3.Future<_i6.User> updateProfile({
     required int userId,
     String? fullName,
     String? email,
-  }) => caller.callServerEndpoint<_i5.User>(
+  }) => caller.callServerEndpoint<_i6.User>(
     'auth',
     'updateProfile',
     {
@@ -458,7 +596,7 @@ class EndpointCampaign extends _i2.EndpointRef {
   /// - [Exception] if user doesn't have access to company profile
   /// - [Exception] if company profile or product not found
   /// - [Exception] if AI generation fails
-  _i3.Future<_i6.CampaignGenerationResult> generateCampaign({
+  _i3.Future<_i7.CampaignGenerationResult> generateCampaign({
     required int userId,
     required int companyProfileId,
     int? productId,
@@ -466,7 +604,7 @@ class EndpointCampaign extends _i2.EndpointRef {
     required List<String> selectedPlatforms,
     required bool generateImage,
     String? title,
-  }) => caller.callServerEndpoint<_i6.CampaignGenerationResult>(
+  }) => caller.callServerEndpoint<_i7.CampaignGenerationResult>(
     'campaign',
     'generateCampaign',
     {
@@ -496,12 +634,12 @@ class EndpointCampaign extends _i2.EndpointRef {
   /// Throws:
   /// - [Exception] if post not found or access denied
   /// - [Exception] if platform not in selected platforms
-  _i3.Future<_i6a.PlatformContent> regeneratePlatform({
+  _i3.Future<_i8.PlatformContent> regeneratePlatform({
     required int userId,
     required int postId,
     required String platform,
     String? newPrompt,
-  }) => caller.callServerEndpoint<_i6a.PlatformContent>(
+  }) => caller.callServerEndpoint<_i8.PlatformContent>(
     'campaign',
     'regeneratePlatform',
     {
@@ -523,12 +661,12 @@ class EndpointCampaign extends _i2.EndpointRef {
   /// - [editRequest] - User's edit instructions (e.g., "make it shorter", "add emoji")
   ///
   /// Returns: PlatformContent with edited content
-  _i3.Future<_i6a.PlatformContent> editPlatformContent({
+  _i3.Future<_i8.PlatformContent> editPlatformContent({
     required int userId,
     required int postId,
     required String platform,
     required String editRequest,
-  }) => caller.callServerEndpoint<_i6a.PlatformContent>(
+  }) => caller.callServerEndpoint<_i8.PlatformContent>(
     'campaign',
     'editPlatformContent',
     {
@@ -581,9 +719,9 @@ class EndpointCompany extends _i2.EndpointRef {
   ///
   /// Throws:
   /// - [Exception] if user not found
-  _i3.Future<List<_i7.CompanyProfile>> listCompanyProfiles({
+  _i3.Future<List<_i9.CompanyProfile>> listCompanyProfiles({
     required int userId,
-  }) => caller.callServerEndpoint<List<_i7.CompanyProfile>>(
+  }) => caller.callServerEndpoint<List<_i9.CompanyProfile>>(
     'company',
     'listCompanyProfiles',
     {'userId': userId},
@@ -603,10 +741,10 @@ class EndpointCompany extends _i2.EndpointRef {
   /// Throws:
   /// - [Exception] if profile not found
   /// - [Exception] if access denied
-  _i3.Future<_i7.CompanyProfile> getCompanyProfile({
+  _i3.Future<_i9.CompanyProfile> getCompanyProfile({
     required int userId,
     required int companyProfileId,
-  }) => caller.callServerEndpoint<_i7.CompanyProfile>(
+  }) => caller.callServerEndpoint<_i9.CompanyProfile>(
     'company',
     'getCompanyProfile',
     {
@@ -631,13 +769,13 @@ class EndpointCompany extends _i2.EndpointRef {
   /// Throws:
   /// - [Exception] if validation fails
   /// - [Exception] if user not found
-  _i3.Future<_i7.CompanyProfile> createCompanyProfile({
+  _i3.Future<_i9.CompanyProfile> createCompanyProfile({
     required int userId,
     required String name,
     String? description,
     String? brandVoice,
     List<String>? uploadedFiles,
-  }) => caller.callServerEndpoint<_i7.CompanyProfile>(
+  }) => caller.callServerEndpoint<_i9.CompanyProfile>(
     'company',
     'createCompanyProfile',
     {
@@ -667,14 +805,14 @@ class EndpointCompany extends _i2.EndpointRef {
   /// Throws:
   /// - [Exception] if profile not found or access denied
   /// - [Exception] if validation fails
-  _i3.Future<_i7.CompanyProfile> updateCompanyProfile({
+  _i3.Future<_i9.CompanyProfile> updateCompanyProfile({
     required int userId,
     required int companyProfileId,
     String? name,
     String? description,
     String? brandVoice,
     List<String>? uploadedFiles,
-  }) => caller.callServerEndpoint<_i7.CompanyProfile>(
+  }) => caller.callServerEndpoint<_i9.CompanyProfile>(
     'company',
     'updateCompanyProfile',
     {
@@ -725,15 +863,389 @@ class EndpointCompany extends _i2.EndpointRef {
   /// - [companyProfileId] - Company profile ID
   ///
   /// Returns: List of Product objects
-  _i3.Future<List<_i8.Product>> getCompanyProducts({
+  _i3.Future<List<_i10.Product>> getCompanyProducts({
     required int userId,
     required int companyProfileId,
-  }) => caller.callServerEndpoint<List<_i8.Product>>(
+  }) => caller.callServerEndpoint<List<_i10.Product>>(
     'company',
     'getCompanyProducts',
     {
       'userId': userId,
       'companyProfileId': companyProfileId,
+    },
+  );
+}
+
+/// Connections endpoint for managing social media platform connections via Postiz.
+///
+/// Provides methods for:
+/// - Listing all platform connections for a user's organization
+/// - Syncing connections from Postiz API
+/// - Disconnecting platforms (removing from DB only)
+/// - Checking connection status for all platforms
+///
+/// Example usage from client:
+/// ```dart
+/// // Sync connections from Postiz
+/// final connections = await client.connections.syncFromPostiz(
+///   userId: currentUser.id,
+/// );
+///
+/// // List all connections
+/// final allConnections = await client.connections.listConnections(
+///   userId: currentUser.id,
+/// );
+///
+/// // Check platform status
+/// final status = await client.connections.getConnectionStatus(
+///   userId: currentUser.id,
+/// );
+/// print('Instagram connected: ${status['instagram']}');
+///
+/// // Disconnect a platform
+/// await client.connections.disconnectPlatform(
+///   userId: currentUser.id,
+///   connectionId: 123,
+/// );
+/// ```
+/// {@category Endpoint}
+class EndpointConnections extends _i2.EndpointRef {
+  EndpointConnections(_i2.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'connections';
+
+  /// Lists all social media platform connections for the user's organization.
+  ///
+  /// This method retrieves all active and inactive connections that belong to
+  /// the user's organization. Connections are linked via organizationId.
+  ///
+  /// Parameters:
+  /// - [userId] - Current user ID (used to determine organization)
+  ///
+  /// Returns: List of SocialMediaConnection objects
+  ///
+  /// Throws:
+  /// - [Exception] if user not found
+  /// - [Exception] if user doesn't belong to an organization
+  _i3.Future<List<_i11.SocialMediaConnection>> listConnections({
+    required int userId,
+  }) => caller.callServerEndpoint<List<_i11.SocialMediaConnection>>(
+    'connections',
+    'listConnections',
+    {'userId': userId},
+  );
+
+  /// Syncs platform connections from Postiz API.
+  ///
+  /// This is the primary way connections are added to the system. The method:
+  /// 1. Validates user and loads organization
+  /// 2. Checks organization has Postiz API key configured
+  /// 3. Calls Postiz API to get all integrations
+  /// 4. Creates or updates SocialMediaConnection records
+  /// 5. Maps Postiz integration data to our model
+  ///
+  /// Postiz Integration Mapping:
+  /// - `providerIdentifier` → our `platform` field
+  /// - `name` → our `platformUsername` field
+  /// - `id` → our `postizIntegrationId` field
+  /// - `picture` → stored in platformUserId temporarily (should be separate field)
+  ///
+  /// Parameters:
+  /// - [userId] - Current user ID
+  ///
+  /// Returns: List of synced SocialMediaConnection objects
+  ///
+  /// Throws:
+  /// - [Exception] if user not found
+  /// - [Exception] if organization not found
+  /// - [Exception] if Postiz API key not configured
+  /// - [PostizApiException] if Postiz API call fails
+  _i3.Future<List<_i11.SocialMediaConnection>> syncFromPostiz({
+    required int userId,
+  }) => caller.callServerEndpoint<List<_i11.SocialMediaConnection>>(
+    'connections',
+    'syncFromPostiz',
+    {'userId': userId},
+  );
+
+  /// Disconnects a platform by removing the connection record.
+  ///
+  /// NOTE: This only removes the connection from our database. It does NOT
+  /// disconnect the integration from Postiz. Users must disconnect from
+  /// Postiz directly if they want to revoke access.
+  ///
+  /// Parameters:
+  /// - [userId] - Current user ID (for validation)
+  /// - [connectionId] - ID of the connection to remove
+  ///
+  /// Returns: void
+  ///
+  /// Throws:
+  /// - [Exception] if user not found
+  /// - [Exception] if connection not found
+  /// - [Exception] if user doesn't have access to this connection
+  _i3.Future<void> disconnectPlatform({
+    required int userId,
+    required int connectionId,
+  }) => caller.callServerEndpoint<void>(
+    'connections',
+    'disconnectPlatform',
+    {
+      'userId': userId,
+      'connectionId': connectionId,
+    },
+  );
+
+  /// Checks which platforms are connected for the user's organization.
+  ///
+  /// Returns a map of platform names to their connection status.
+  /// Supports the following platforms:
+  /// - x (Twitter/X)
+  /// - linkedin
+  /// - instagram
+  /// - facebook
+  /// - pinterest
+  ///
+  /// Parameters:
+  /// - [userId] - Current user ID
+  ///
+  /// Returns: `Map<String, bool>` where key is platform name and value is connected status
+  ///
+  /// Throws:
+  /// - [Exception] if user not found
+  _i3.Future<Map<String, bool>> getConnectionStatus({required int userId}) =>
+      caller.callServerEndpoint<Map<String, bool>>(
+        'connections',
+        'getConnectionStatus',
+        {'userId': userId},
+      );
+}
+
+/// Post endpoint for managing social media posts (CRUD operations).
+///
+/// Provides methods for:
+/// - Listing posts with filtering and pagination
+/// - Getting a single post by ID
+/// - Updating post details (status, schedule, content)
+/// - Deleting posts
+/// - Duplicating posts
+/// - Publishing posts immediately
+///
+/// Example usage from client:
+/// ```dart
+/// // List posts with filters
+/// final posts = await client.post.listPosts(
+///   userId: 1,
+///   statusFilter: ['draft', 'scheduled'],
+///   platformFilter: ['x', 'linkedin'],
+///   limit: 50,
+/// );
+///
+/// // Get single post
+/// final post = await client.post.getPost(
+///   userId: 1,
+///   postId: 123,
+/// );
+///
+/// // Update post
+/// final updated = await client.post.updatePost(
+///   userId: 1,
+///   postId: 123,
+///   status: 'scheduled',
+///   scheduleTime: DateTime.now().add(Duration(hours: 2)),
+/// );
+/// ```
+/// {@category Endpoint}
+class EndpointPost extends _i2.EndpointRef {
+  EndpointPost(_i2.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'post';
+
+  /// Lists posts with filtering and pagination.
+  ///
+  /// This method retrieves posts for a specific user with various filtering
+  /// options. All posts are filtered by organization to ensure data isolation.
+  ///
+  /// Parameters:
+  /// - [userId] - Current user ID (used for organization validation)
+  /// - [statusFilter] - Optional list of statuses to filter by (draft, scheduled, published, failed)
+  /// - [platformFilter] - Optional list of platforms to filter by (x, linkedin, instagram, facebook, pinterest)
+  /// - [startDate] - Optional start date for filtering by createdAt
+  /// - [endDate] - Optional end date for filtering by createdAt
+  /// - [searchQuery] - Optional text search in title and content
+  /// - [limit] - Maximum number of posts to return (default: 50, max: 200)
+  /// - [offset] - Number of posts to skip for pagination (default: 0)
+  ///
+  /// Returns: List of Post objects matching the filters, ordered by createdAt DESC
+  ///
+  /// Throws:
+  /// - [Exception] if user not found
+  /// - [Exception] if invalid status or platform values provided
+  _i3.Future<List<_i12.Post>> listPosts({
+    required int userId,
+    List<String>? statusFilter,
+    List<String>? platformFilter,
+    DateTime? startDate,
+    DateTime? endDate,
+    String? searchQuery,
+    required int limit,
+    required int offset,
+  }) => caller.callServerEndpoint<List<_i12.Post>>(
+    'post',
+    'listPosts',
+    {
+      'userId': userId,
+      'statusFilter': statusFilter,
+      'platformFilter': platformFilter,
+      'startDate': startDate,
+      'endDate': endDate,
+      'searchQuery': searchQuery,
+      'limit': limit,
+      'offset': offset,
+    },
+  );
+
+  /// Gets a single post by ID.
+  ///
+  /// Validates that the user has access to the post through their organization.
+  ///
+  /// Parameters:
+  /// - [userId] - Current user ID (for validation)
+  /// - [postId] - ID of the post to retrieve
+  ///
+  /// Returns: Post object or null if not found or user doesn't have access
+  ///
+  /// Throws:
+  /// - [Exception] if user not found
+  _i3.Future<_i12.Post?> getPost({
+    required int userId,
+    required int postId,
+  }) => caller.callServerEndpoint<_i12.Post?>(
+    'post',
+    'getPost',
+    {
+      'userId': userId,
+      'postId': postId,
+    },
+  );
+
+  /// Updates an existing post.
+  ///
+  /// Allows updating post status, schedule time, edited content, and title.
+  /// User must own the post (through organization).
+  ///
+  /// Parameters:
+  /// - [userId] - Current user ID (for validation)
+  /// - [postId] - ID of the post to update
+  /// - [status] - Optional new status (draft, scheduled, published, failed)
+  /// - [scheduleTime] - Optional new schedule time
+  /// - [editedContent] - Optional map of platform-specific edited content
+  /// - [title] - Optional new title
+  ///
+  /// Returns: Updated Post object
+  ///
+  /// Throws:
+  /// - [Exception] if user not found
+  /// - [Exception] if post not found
+  /// - [Exception] if user doesn't have access to the post
+  /// - [Exception] if invalid status value
+  _i3.Future<_i12.Post> updatePost({
+    required int userId,
+    required int postId,
+    String? status,
+    DateTime? scheduleTime,
+    Map<String, String>? editedContent,
+    String? title,
+  }) => caller.callServerEndpoint<_i12.Post>(
+    'post',
+    'updatePost',
+    {
+      'userId': userId,
+      'postId': postId,
+      'status': status,
+      'scheduleTime': scheduleTime,
+      'editedContent': editedContent,
+      'title': title,
+    },
+  );
+
+  /// Deletes a post.
+  ///
+  /// User must own the post (through organization).
+  ///
+  /// Parameters:
+  /// - [userId] - Current user ID (for validation)
+  /// - [postId] - ID of the post to delete
+  ///
+  /// Throws:
+  /// - [Exception] if user not found
+  /// - [Exception] if post not found
+  /// - [Exception] if user doesn't have access to the post
+  _i3.Future<void> deletePost({
+    required int userId,
+    required int postId,
+  }) => caller.callServerEndpoint<void>(
+    'post',
+    'deletePost',
+    {
+      'userId': userId,
+      'postId': postId,
+    },
+  );
+
+  /// Duplicates an existing post.
+  ///
+  /// Creates a copy of the post with all fields except id, createdAt.
+  /// The new post is set to 'draft' status with cleared publishing timestamps.
+  ///
+  /// Parameters:
+  /// - [userId] - Current user ID (for validation)
+  /// - [postId] - ID of the post to duplicate
+  ///
+  /// Returns: New Post object (the duplicate)
+  ///
+  /// Throws:
+  /// - [Exception] if user not found
+  /// - [Exception] if post not found
+  /// - [Exception] if user doesn't have access to the post
+  _i3.Future<_i12.Post> duplicatePost({
+    required int userId,
+    required int postId,
+  }) => caller.callServerEndpoint<_i12.Post>(
+    'post',
+    'duplicatePost',
+    {
+      'userId': userId,
+      'postId': postId,
+    },
+  );
+
+  /// Publishes a post immediately by scheduling it for now.
+  ///
+  /// Sets the post status to 'scheduled' and scheduleTime to current time.
+  /// This triggers the publishing workflow.
+  ///
+  /// Parameters:
+  /// - [userId] - Current user ID (for validation)
+  /// - [postId] - ID of the post to publish
+  ///
+  /// Returns: Updated Post object
+  ///
+  /// Throws:
+  /// - [Exception] if user not found
+  /// - [Exception] if post not found
+  /// - [Exception] if user doesn't have access to the post
+  _i3.Future<_i12.Post> publishNow({
+    required int userId,
+    required int postId,
+  }) => caller.callServerEndpoint<_i12.Post>(
+    'post',
+    'publishNow',
+    {
+      'userId': userId,
+      'postId': postId,
     },
   );
 }
@@ -781,10 +1293,10 @@ class EndpointProduct extends _i2.EndpointRef {
   ///
   /// Throws:
   /// - [Exception] if user doesn't have access to company profile
-  _i3.Future<List<_i8.Product>> listProducts({
+  _i3.Future<List<_i10.Product>> listProducts({
     required int userId,
     required int companyProfileId,
-  }) => caller.callServerEndpoint<List<_i8.Product>>(
+  }) => caller.callServerEndpoint<List<_i10.Product>>(
     'product',
     'listProducts',
     {
@@ -807,10 +1319,10 @@ class EndpointProduct extends _i2.EndpointRef {
   /// Throws:
   /// - [Exception] if product not found
   /// - [Exception] if access denied
-  _i3.Future<_i8.Product> getProduct({
+  _i3.Future<_i10.Product> getProduct({
     required int userId,
     required int productId,
-  }) => caller.callServerEndpoint<_i8.Product>(
+  }) => caller.callServerEndpoint<_i10.Product>(
     'product',
     'getProduct',
     {
@@ -838,7 +1350,7 @@ class EndpointProduct extends _i2.EndpointRef {
   /// Throws:
   /// - [Exception] if validation fails
   /// - [Exception] if user doesn't have access to company profile
-  _i3.Future<_i8.Product> createProduct({
+  _i3.Future<_i10.Product> createProduct({
     required int userId,
     required int companyProfileId,
     required String name,
@@ -846,7 +1358,7 @@ class EndpointProduct extends _i2.EndpointRef {
     String? targetAudience,
     List<String>? keyFeatures,
     String? category,
-  }) => caller.callServerEndpoint<_i8.Product>(
+  }) => caller.callServerEndpoint<_i10.Product>(
     'product',
     'createProduct',
     {
@@ -879,7 +1391,7 @@ class EndpointProduct extends _i2.EndpointRef {
   /// Throws:
   /// - [Exception] if product not found or access denied
   /// - [Exception] if validation fails
-  _i3.Future<_i8.Product> updateProduct({
+  _i3.Future<_i10.Product> updateProduct({
     required int userId,
     required int productId,
     String? name,
@@ -887,7 +1399,7 @@ class EndpointProduct extends _i2.EndpointRef {
     String? targetAudience,
     List<String>? keyFeatures,
     String? category,
-  }) => caller.callServerEndpoint<_i8.Product>(
+  }) => caller.callServerEndpoint<_i10.Product>(
     'product',
     'updateProduct',
     {
@@ -938,15 +1450,199 @@ class EndpointProduct extends _i2.EndpointRef {
   /// - [productId] - Product ID
   ///
   /// Returns: List of Post objects
-  _i3.Future<List<_i9.Post>> getProductPosts({
+  _i3.Future<List<_i12.Post>> getProductPosts({
     required int userId,
     required int productId,
-  }) => caller.callServerEndpoint<List<_i9.Post>>(
+  }) => caller.callServerEndpoint<List<_i12.Post>>(
     'product',
     'getProductPosts',
     {
       'userId': userId,
       'productId': productId,
+    },
+  );
+}
+
+/// Settings endpoint for user and organization settings management.
+///
+/// Provides methods for:
+/// - Getting user profile and organization information
+/// - Updating user profile (name, email)
+/// - Changing user password
+/// - Updating organization settings (admin only)
+/// - Deactivating user accounts
+///
+/// Example usage from client:
+/// ```dart
+/// // Get user settings
+/// final settings = await client.settings.getUserSettings(userId: 1);
+///
+/// // Update user profile
+/// final updatedUser = await client.settings.updateUserProfile(
+///   userId: 1,
+///   fullName: 'Jane Doe',
+///   email: 'jane@example.com',
+/// );
+///
+/// // Change password
+/// await client.settings.updatePassword(
+///   userId: 1,
+///   currentPassword: 'old_password',
+///   newPassword: 'new_secure_password',
+/// );
+///
+/// // Update organization (admin only)
+/// final updatedOrg = await client.settings.updateOrganization(
+///   userId: 1,
+///   name: 'New Company Name',
+///   postizApiKey: 'new_api_key',
+/// );
+/// ```
+/// {@category Endpoint}
+class EndpointSettings extends _i2.EndpointRef {
+  EndpointSettings(_i2.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'settings';
+
+  /// Gets user profile and organization information.
+  ///
+  /// Returns both the user profile and their organization details
+  /// in a single call for the settings page.
+  ///
+  /// Parameters:
+  /// - [userId] - The user ID to fetch settings for
+  ///
+  /// Returns: Map containing:
+  /// - 'user': User object without password hash
+  /// - 'organization': Organization object
+  ///
+  /// Throws:
+  /// - [Exception] if user or organization not found
+  _i3.Future<Map<String, dynamic>> getUserSettings({required int userId}) =>
+      caller.callServerEndpoint<Map<String, dynamic>>(
+        'settings',
+        'getUserSettings',
+        {'userId': userId},
+      );
+
+  /// Updates user's name and email.
+  ///
+  /// Allows users to update their profile information. Email must be
+  /// unique across the system.
+  ///
+  /// Parameters:
+  /// - [userId] - User ID to update
+  /// - [fullName] - Optional new full name
+  /// - [email] - Optional new email address
+  ///
+  /// Returns: Updated User object without password hash
+  ///
+  /// Throws:
+  /// - [Exception] if user not found
+  /// - [Exception] if email is already in use
+  /// - [Exception] if email format is invalid
+  _i3.Future<_i6.User> updateUserProfile({
+    required int userId,
+    String? fullName,
+    String? email,
+  }) => caller.callServerEndpoint<_i6.User>(
+    'settings',
+    'updateUserProfile',
+    {
+      'userId': userId,
+      'fullName': fullName,
+      'email': email,
+    },
+  );
+
+  /// Changes user password.
+  ///
+  /// Requires current password verification before allowing the change.
+  /// New password must meet security requirements.
+  ///
+  /// Parameters:
+  /// - [userId] - User ID
+  /// - [currentPassword] - Current password for verification
+  /// - [newPassword] - New password (min 8 characters)
+  ///
+  /// Returns: Success message string
+  ///
+  /// Throws:
+  /// - [Exception] if user not found
+  /// - [Exception] if current password is incorrect
+  /// - [Exception] if new password doesn't meet requirements
+  _i3.Future<String> updatePassword({
+    required int userId,
+    required String currentPassword,
+    required String newPassword,
+  }) => caller.callServerEndpoint<String>(
+    'settings',
+    'updatePassword',
+    {
+      'userId': userId,
+      'currentPassword': currentPassword,
+      'newPassword': newPassword,
+    },
+  );
+
+  /// Updates organization settings (admin only).
+  ///
+  /// Allows organization admins to update organization name and API keys.
+  /// Regular users cannot access this endpoint.
+  ///
+  /// Parameters:
+  /// - [userId] - User ID (must have admin role)
+  /// - [name] - Optional new organization name
+  /// - [postizApiKey] - Optional Postiz API key
+  /// - [geminiApiKey] - Optional Gemini API key
+  ///
+  /// Returns: Updated Organization object
+  ///
+  /// Throws:
+  /// - [Exception] if user is not admin
+  /// - [Exception] if user or organization not found
+  /// - [Exception] if no fields provided for update
+  _i3.Future<_i13.Organization> updateOrganization({
+    required int userId,
+    String? name,
+    String? postizApiKey,
+    String? geminiApiKey,
+  }) => caller.callServerEndpoint<_i13.Organization>(
+    'settings',
+    'updateOrganization',
+    {
+      'userId': userId,
+      'name': name,
+      'postizApiKey': postizApiKey,
+      'geminiApiKey': geminiApiKey,
+    },
+  );
+
+  /// Deactivates user account (soft delete).
+  ///
+  /// Marks the user account as inactive without deleting data.
+  /// Requires password confirmation for security.
+  ///
+  /// Parameters:
+  /// - [userId] - User ID to deactivate
+  /// - [password] - Password confirmation
+  ///
+  /// Returns: Success message string
+  ///
+  /// Throws:
+  /// - [Exception] if user not found
+  /// - [Exception] if password is incorrect
+  /// - [Exception] if account is already inactive
+  _i3.Future<String> deactivateAccount({
+    required int userId,
+    required String password,
+  }) => caller.callServerEndpoint<String>(
+    'settings',
+    'deactivateAccount',
+    {
+      'userId': userId,
+      'password': password,
     },
   );
 }
@@ -961,8 +1657,8 @@ class EndpointGreeting extends _i2.EndpointRef {
   String get name => 'greeting';
 
   /// Returns a personalized greeting message: "Hello {name}".
-  _i3.Future<_i10.Greeting> hello(String name) =>
-      caller.callServerEndpoint<_i10.Greeting>(
+  _i3.Future<_i14.Greeting> hello(String name) =>
+      caller.callServerEndpoint<_i14.Greeting>(
         'greeting',
         'hello',
         {'name': name},
@@ -1000,7 +1696,7 @@ class Client extends _i2.ServerpodClientShared {
     bool? disconnectStreamsOnLostInternetConnection,
   }) : super(
          host,
-         _i11.Protocol(),
+         _i15.Protocol(),
          securityContext: securityContext,
          streamingConnectionTimeout: streamingConnectionTimeout,
          connectionTimeout: connectionTimeout,
@@ -1011,10 +1707,14 @@ class Client extends _i2.ServerpodClientShared {
        ) {
     emailIdp = EndpointEmailIdp(this);
     jwtRefresh = EndpointJwtRefresh(this);
+    aILogs = EndpointAILogs(this);
     auth = EndpointAuth(this);
     campaign = EndpointCampaign(this);
     company = EndpointCompany(this);
+    connections = EndpointConnections(this);
+    post = EndpointPost(this);
     product = EndpointProduct(this);
+    settings = EndpointSettings(this);
     greeting = EndpointGreeting(this);
     modules = Modules(this);
   }
@@ -1023,13 +1723,21 @@ class Client extends _i2.ServerpodClientShared {
 
   late final EndpointJwtRefresh jwtRefresh;
 
+  late final EndpointAILogs aILogs;
+
   late final EndpointAuth auth;
 
   late final EndpointCampaign campaign;
 
   late final EndpointCompany company;
 
+  late final EndpointConnections connections;
+
+  late final EndpointPost post;
+
   late final EndpointProduct product;
+
+  late final EndpointSettings settings;
 
   late final EndpointGreeting greeting;
 
@@ -1039,10 +1747,14 @@ class Client extends _i2.ServerpodClientShared {
   Map<String, _i2.EndpointRef> get endpointRefLookup => {
     'emailIdp': emailIdp,
     'jwtRefresh': jwtRefresh,
+    'aILogs': aILogs,
     'auth': auth,
     'campaign': campaign,
     'company': company,
+    'connections': connections,
+    'post': post,
     'product': product,
+    'settings': settings,
     'greeting': greeting,
   };
 

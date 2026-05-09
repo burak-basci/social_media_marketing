@@ -1,169 +1,148 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'app_colors.dart';
 
 /// Application typography system
-/// Uses Inter font family for modern, professional look
+/// Uses Inter font family with proper weights:
+/// - Headline: Inter SemiBold (w600)
+/// - Subline/Body: Inter Regular (w400)
+/// - CTA: Inter SemiBold (w600)
 class AppTypography {
   // Prevent instantiation
   AppTypography._();
 
-  // Font family
-  static const String fontFamily = 'Inter';
+  // ─── Headline styles: Inter SemiBold ──────────────────────────────────────
 
-  // Display text styles (largest headings)
-  static const TextStyle displayLarge = TextStyle(
-    fontFamily: fontFamily,
-    fontSize: 48,
-    fontWeight: FontWeight.bold,
-    height: 1.2,
-    letterSpacing: -0.5,
-  );
+  static TextStyle get displayLarge => GoogleFonts.inter(
+        fontSize: 48,
+        fontWeight: FontWeight.w600,
+        height: 1.2,
+        letterSpacing: -0.5,
+      );
 
-  static const TextStyle displayMedium = TextStyle(
-    fontFamily: fontFamily,
-    fontSize: 40,
-    fontWeight: FontWeight.bold,
-    height: 1.2,
-    letterSpacing: -0.5,
-  );
+  static TextStyle get displayMedium => GoogleFonts.inter(
+        fontSize: 40,
+        fontWeight: FontWeight.w600,
+        height: 1.2,
+        letterSpacing: -0.5,
+      );
 
-  static const TextStyle displaySmall = TextStyle(
-    fontFamily: fontFamily,
-    fontSize: 32,
-    fontWeight: FontWeight.bold,
-    height: 1.25,
-    letterSpacing: -0.25,
-  );
+  static TextStyle get displaySmall => GoogleFonts.inter(
+        fontSize: 32,
+        fontWeight: FontWeight.w600,
+        height: 1.25,
+        letterSpacing: -0.25,
+      );
 
-  // Heading text styles
-  static const TextStyle headlineLarge = TextStyle(
-    fontFamily: fontFamily,
-    fontSize: 28,
-    fontWeight: FontWeight.bold,
-    height: 1.3,
-  );
+  static TextStyle get headlineLarge => GoogleFonts.inter(
+        fontSize: 28,
+        fontWeight: FontWeight.w600,
+        height: 1.3,
+      );
 
-  static const TextStyle headlineMedium = TextStyle(
-    fontFamily: fontFamily,
-    fontSize: 24,
-    fontWeight: FontWeight.bold,
-    height: 1.3,
-  );
+  static TextStyle get headlineMedium => GoogleFonts.inter(
+        fontSize: 24,
+        fontWeight: FontWeight.w600,
+        height: 1.3,
+      );
 
-  static const TextStyle headlineSmall = TextStyle(
-    fontFamily: fontFamily,
-    fontSize: 20,
-    fontWeight: FontWeight.w600,
-    height: 1.4,
-  );
+  static TextStyle get headlineSmall => GoogleFonts.inter(
+        fontSize: 20,
+        fontWeight: FontWeight.w600,
+        height: 1.4,
+      );
 
-  // Title text styles
-  static const TextStyle titleLarge = TextStyle(
-    fontFamily: fontFamily,
-    fontSize: 18,
-    fontWeight: FontWeight.w600,
-    height: 1.4,
-  );
+  static TextStyle get titleLarge => GoogleFonts.inter(
+        fontSize: 18,
+        fontWeight: FontWeight.w600,
+        height: 1.4,
+      );
 
-  static const TextStyle titleMedium = TextStyle(
-    fontFamily: fontFamily,
-    fontSize: 16,
-    fontWeight: FontWeight.w600,
-    height: 1.4,
-  );
+  static TextStyle get titleMedium => GoogleFonts.inter(
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+        height: 1.4,
+      );
 
-  static const TextStyle titleSmall = TextStyle(
-    fontFamily: fontFamily,
-    fontSize: 14,
-    fontWeight: FontWeight.w600,
-    height: 1.4,
-  );
+  static TextStyle get titleSmall => GoogleFonts.inter(
+        fontSize: 14,
+        fontWeight: FontWeight.w600,
+        height: 1.4,
+      );
 
-  // Body text styles
-  static const TextStyle bodyLarge = TextStyle(
-    fontFamily: fontFamily,
-    fontSize: 16,
-    fontWeight: FontWeight.normal,
-    height: 1.5,
-  );
+  // ─── Body / Subline styles: Inter Regular ─────────────────────────────────
 
-  static const TextStyle bodyMedium = TextStyle(
-    fontFamily: fontFamily,
-    fontSize: 14,
-    fontWeight: FontWeight.normal,
-    height: 1.5,
-  );
+  static TextStyle get bodyLarge => GoogleFonts.inter(
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+        height: 1.5,
+      );
 
-  static const TextStyle bodySmall = TextStyle(
-    fontFamily: fontFamily,
-    fontSize: 12,
-    fontWeight: FontWeight.normal,
-    height: 1.5,
-  );
+  static TextStyle get bodyMedium => GoogleFonts.inter(
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+        height: 1.5,
+      );
 
-  // Label text styles (for buttons, inputs, etc.)
-  static const TextStyle labelLarge = TextStyle(
-    fontFamily: fontFamily,
-    fontSize: 14,
-    fontWeight: FontWeight.w500,
-    height: 1.4,
-    letterSpacing: 0.1,
-  );
+  static TextStyle get bodySmall => GoogleFonts.inter(
+        fontSize: 12,
+        fontWeight: FontWeight.w400,
+        height: 1.5,
+      );
 
-  static const TextStyle labelMedium = TextStyle(
-    fontFamily: fontFamily,
-    fontSize: 12,
-    fontWeight: FontWeight.w500,
-    height: 1.4,
-    letterSpacing: 0.1,
-  );
+  // ─── Label / CTA styles: Inter SemiBold ───────────────────────────────────
 
-  static const TextStyle labelSmall = TextStyle(
-    fontFamily: fontFamily,
-    fontSize: 10,
-    fontWeight: FontWeight.w500,
-    height: 1.4,
-    letterSpacing: 0.1,
-  );
+  static TextStyle get labelLarge => GoogleFonts.inter(
+        fontSize: 14,
+        fontWeight: FontWeight.w600,
+        height: 1.4,
+        letterSpacing: 0.1,
+      );
 
-  // Helper methods to get colored text styles
-  static TextStyle withColor(TextStyle style, Color color) {
-    return style.copyWith(color: color);
-  }
+  static TextStyle get labelMedium => GoogleFonts.inter(
+        fontSize: 12,
+        fontWeight: FontWeight.w600,
+        height: 1.4,
+        letterSpacing: 0.1,
+      );
+
+  static TextStyle get labelSmall => GoogleFonts.inter(
+        fontSize: 10,
+        fontWeight: FontWeight.w600,
+        height: 1.4,
+        letterSpacing: 0.1,
+      );
+
+  // ─── Helper methods ────────────────────────────────────────────────────────
+
+  static TextStyle withColor(TextStyle style, Color color) =>
+      style.copyWith(color: color);
 
   // Commonly used text styles with colors
-  static TextStyle get headingPrimary => headlineMedium.copyWith(
-        color: AppColors.textPrimaryLight,
-      );
+  static TextStyle get headingPrimary =>
+      headlineMedium.copyWith(color: AppColors.textPrimaryLight);
 
-  static TextStyle get headingSecondary => titleMedium.copyWith(
-        color: AppColors.textSecondaryLight,
-      );
+  static TextStyle get headingSecondary =>
+      titleMedium.copyWith(color: AppColors.textSecondaryLight);
 
-  static TextStyle get bodyPrimary => bodyMedium.copyWith(
-        color: AppColors.textPrimaryLight,
-      );
+  static TextStyle get bodyPrimary =>
+      bodyMedium.copyWith(color: AppColors.textPrimaryLight);
 
-  static TextStyle get bodySecondary => bodyMedium.copyWith(
-        color: AppColors.textSecondaryLight,
-      );
+  static TextStyle get bodySecondary =>
+      bodyMedium.copyWith(color: AppColors.textSecondaryLight);
 
-  static TextStyle get buttonText => labelLarge.copyWith(
-        color: Colors.white,
-      );
+  static TextStyle get buttonText => labelLarge.copyWith(color: Colors.white);
 
   static TextStyle get linkText => labelMedium.copyWith(
         color: AppColors.primaryBlue,
         decoration: TextDecoration.underline,
       );
 
-  static TextStyle get caption => bodySmall.copyWith(
-        color: AppColors.textSecondaryLight,
-      );
+  static TextStyle get caption =>
+      bodySmall.copyWith(color: AppColors.textSecondaryLight);
 
   static TextStyle get overline => labelSmall.copyWith(
         color: AppColors.textSecondaryLight,
         letterSpacing: 0.5,
-        fontWeight: FontWeight.w700,
       );
 }

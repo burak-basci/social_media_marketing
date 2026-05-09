@@ -8,6 +8,11 @@ emailIdp:
   - finishPasswordReset:
 jwtRefresh:
   - refreshAccessToken:
+aILogs:
+  - getLogs:
+  - getTotalCost:
+  - getLog:
+  - getStatistics:
 auth:
   - register:
   - login:
@@ -26,6 +31,18 @@ company:
   - updateCompanyProfile:
   - deleteCompanyProfile:
   - getCompanyProducts:
+connections:
+  - listConnections:
+  - syncFromPostiz:
+  - disconnectPlatform:
+  - getConnectionStatus:
+post:
+  - listPosts:
+  - getPost:
+  - updatePost:
+  - deletePost:
+  - duplicatePost:
+  - publishNow:
 product:
   - listProducts:
   - getProduct:
@@ -33,5 +50,11 @@ product:
   - updateProduct:
   - deleteProduct:
   - getProductPosts:
+settings:
+  - getUserSettings:
+  - updateUserProfile:
+  - updatePassword:
+  - updateOrganization:
+  - deactivateAccount:
 greeting:
   - hello:

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_typography.dart';
 import '../constants/app_spacing.dart';
@@ -218,23 +219,25 @@ class AppTheme {
         labelType: NavigationRailLabelType.all,
       ),
 
-      // Text theme
-      textTheme: TextTheme(
-        displayLarge: AppTypography.displayLarge,
-        displayMedium: AppTypography.displayMedium,
-        displaySmall: AppTypography.displaySmall,
-        headlineLarge: AppTypography.headlineLarge,
-        headlineMedium: AppTypography.headlineMedium,
-        headlineSmall: AppTypography.headlineSmall,
-        titleLarge: AppTypography.titleLarge,
-        titleMedium: AppTypography.titleMedium,
-        titleSmall: AppTypography.titleSmall,
-        bodyLarge: AppTypography.bodyLarge,
-        bodyMedium: AppTypography.bodyMedium,
-        bodySmall: AppTypography.bodySmall,
-        labelLarge: AppTypography.labelLarge,
-        labelMedium: AppTypography.labelMedium,
-        labelSmall: AppTypography.labelSmall,
+      // Text theme – built from Google Fonts Inter base
+      textTheme: GoogleFonts.interTextTheme(
+        TextTheme(
+          displayLarge: AppTypography.displayLarge,
+          displayMedium: AppTypography.displayMedium,
+          displaySmall: AppTypography.displaySmall,
+          headlineLarge: AppTypography.headlineLarge,
+          headlineMedium: AppTypography.headlineMedium,
+          headlineSmall: AppTypography.headlineSmall,
+          titleLarge: AppTypography.titleLarge,
+          titleMedium: AppTypography.titleMedium,
+          titleSmall: AppTypography.titleSmall,
+          bodyLarge: AppTypography.bodyLarge,
+          bodyMedium: AppTypography.bodyMedium,
+          bodySmall: AppTypography.bodySmall,
+          labelLarge: AppTypography.labelLarge,
+          labelMedium: AppTypography.labelMedium,
+          labelSmall: AppTypography.labelSmall,
+        ),
       ).apply(
         bodyColor: AppColors.textPrimaryLight,
         displayColor: AppColors.textPrimaryLight,
@@ -429,23 +432,25 @@ class AppTheme {
         labelType: NavigationRailLabelType.all,
       ),
 
-      // Text theme
-      textTheme: TextTheme(
-        displayLarge: AppTypography.displayLarge,
-        displayMedium: AppTypography.displayMedium,
-        displaySmall: AppTypography.displaySmall,
-        headlineLarge: AppTypography.headlineLarge,
-        headlineMedium: AppTypography.headlineMedium,
-        headlineSmall: AppTypography.headlineSmall,
-        titleLarge: AppTypography.titleLarge,
-        titleMedium: AppTypography.titleMedium,
-        titleSmall: AppTypography.titleSmall,
-        bodyLarge: AppTypography.bodyLarge,
-        bodyMedium: AppTypography.bodyMedium,
-        bodySmall: AppTypography.bodySmall,
-        labelLarge: AppTypography.labelLarge,
-        labelMedium: AppTypography.labelMedium,
-        labelSmall: AppTypography.labelSmall,
+      // Text theme – built from Google Fonts Inter base
+      textTheme: GoogleFonts.interTextTheme(
+        TextTheme(
+          displayLarge: AppTypography.displayLarge,
+          displayMedium: AppTypography.displayMedium,
+          displaySmall: AppTypography.displaySmall,
+          headlineLarge: AppTypography.headlineLarge,
+          headlineMedium: AppTypography.headlineMedium,
+          headlineSmall: AppTypography.headlineSmall,
+          titleLarge: AppTypography.titleLarge,
+          titleMedium: AppTypography.titleMedium,
+          titleSmall: AppTypography.titleSmall,
+          bodyLarge: AppTypography.bodyLarge,
+          bodyMedium: AppTypography.bodyMedium,
+          bodySmall: AppTypography.bodySmall,
+          labelLarge: AppTypography.labelLarge,
+          labelMedium: AppTypography.labelMedium,
+          labelSmall: AppTypography.labelSmall,
+        ),
       ).apply(
         bodyColor: AppColors.textPrimaryDark,
         displayColor: AppColors.textPrimaryDark,

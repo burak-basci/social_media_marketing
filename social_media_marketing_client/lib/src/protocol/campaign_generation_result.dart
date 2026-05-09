@@ -16,7 +16,6 @@ import 'package:social_media_marketing_client/src/protocol/protocol.dart'
 
 abstract class CampaignGenerationResult implements _i1.SerializableModel {
   CampaignGenerationResult._({
-    this.id,
     required this.success,
     this.platformContents,
     this.imagePrompt,
@@ -26,7 +25,6 @@ abstract class CampaignGenerationResult implements _i1.SerializableModel {
   });
 
   factory CampaignGenerationResult({
-    int? id,
     required bool success,
     Map<String, String>? platformContents,
     String? imagePrompt,
@@ -39,7 +37,6 @@ abstract class CampaignGenerationResult implements _i1.SerializableModel {
     Map<String, dynamic> jsonSerialization,
   ) {
     return CampaignGenerationResult(
-      id: jsonSerialization['id'] as int?,
       success: jsonSerialization['success'] as bool,
       platformContents: jsonSerialization['platformContents'] == null
           ? null
@@ -57,11 +54,6 @@ abstract class CampaignGenerationResult implements _i1.SerializableModel {
     );
   }
 
-  /// The database id, set if the object has been inserted into the
-  /// database or if it has been fetched from the database. Otherwise,
-  /// the id will be null.
-  int? id;
-
   bool success;
 
   Map<String, String>? platformContents;
@@ -78,7 +70,6 @@ abstract class CampaignGenerationResult implements _i1.SerializableModel {
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
   CampaignGenerationResult copyWith({
-    int? id,
     bool? success,
     Map<String, String>? platformContents,
     String? imagePrompt,
@@ -90,7 +81,6 @@ abstract class CampaignGenerationResult implements _i1.SerializableModel {
   Map<String, dynamic> toJson() {
     return {
       '__className__': 'CampaignGenerationResult',
-      if (id != null) 'id': id,
       'success': success,
       if (platformContents != null)
         'platformContents': platformContents?.toJson(),
@@ -111,7 +101,6 @@ class _Undefined {}
 
 class _CampaignGenerationResultImpl extends CampaignGenerationResult {
   _CampaignGenerationResultImpl({
-    int? id,
     required bool success,
     Map<String, String>? platformContents,
     String? imagePrompt,
@@ -119,7 +108,6 @@ class _CampaignGenerationResultImpl extends CampaignGenerationResult {
     String? errorMessage,
     Map<String, double>? metadata,
   }) : super._(
-         id: id,
          success: success,
          platformContents: platformContents,
          imagePrompt: imagePrompt,
@@ -133,7 +121,6 @@ class _CampaignGenerationResultImpl extends CampaignGenerationResult {
   @_i1.useResult
   @override
   CampaignGenerationResult copyWith({
-    Object? id = _Undefined,
     bool? success,
     Object? platformContents = _Undefined,
     Object? imagePrompt = _Undefined,
@@ -142,7 +129,6 @@ class _CampaignGenerationResultImpl extends CampaignGenerationResult {
     Object? metadata = _Undefined,
   }) {
     return CampaignGenerationResult(
-      id: id is int? ? id : this.id,
       success: success ?? this.success,
       platformContents: platformContents is Map<String, String>?
           ? platformContents

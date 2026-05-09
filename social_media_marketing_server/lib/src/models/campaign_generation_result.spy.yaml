@@ -1,5 +1,4 @@
 class: CampaignGenerationResult
-table: campaign_generation_results
 fields:
   success: bool
   platformContents: Map<String, String>?

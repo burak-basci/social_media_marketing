@@ -168,7 +168,11 @@ class CampaignEndpoint extends Endpoint {
         postId: updatedPost.id!,
         platformContents: platformContents,
         imagePrompt: campaignResult['imagePrompt'] as String?,
-        timings: campaignResult['timings'] as Map<String, dynamic>?,
+        metadata: campaignResult['timings'] != null
+            ? Map<String, double>.from(
+                (campaignResult['timings'] as Map<String, dynamic>)
+                    .map((k, v) => MapEntry(k, (v as num).toDouble())))
+            : null,
         success: true,
       );
     } catch (e, stackTrace) {
@@ -277,7 +281,7 @@ class CampaignEndpoint extends Endpoint {
       return PlatformContent(
         platform: platform,
         content: newContent,
-        regenerated: true,
+        status: 'regenerated',
       );
     } catch (e) {
       session.log('Platform regeneration failed: $e', level: LogLevel.error);
@@ -365,7 +369,7 @@ class CampaignEndpoint extends Endpoint {
       return PlatformContent(
         platform: platform,
         content: editedContent,
-        regenerated: false,
+        status: 'edited',
       );
     } catch (e) {
       session.log('Content edit failed: $e', level: LogLevel.error);
@@ -423,55 +427,4 @@ class CampaignEndpoint extends Endpoint {
     final title = prompt.trim().split('\n').first;
     return title.length > 50 ? '${title.substring(0, 47)}...' : title;
   }
-}
-
-// ==========================================================================
-// DATA TRANSFER OBJECTS
-// ==========================================================================
-
-/// Result from campaign generation.
-class CampaignGenerationResult {
-  final int postId;
-  final Map<String, String> platformContents;
-  final String? imagePrompt;
-  final Map<String, dynamic>? timings;
-  final bool success;
-  final String? errorMessage;
-
-  CampaignGenerationResult({
-    required this.postId,
-    required this.platformContents,
-    this.imagePrompt,
-    this.timings,
-    required this.success,
-    this.errorMessage,
-  });
-
-  Map<String, dynamic> toJson() => {
-        'postId': postId,
-        'platformContents': platformContents,
-        'imagePrompt': imagePrompt,
-        'timings': timings,
-        'success': success,
-        'errorMessage': errorMessage,
-      };
-}
-
-/// Platform-specific content.
-class PlatformContent {
-  final String platform;
-  final String content;
-  final bool regenerated;
-
-  PlatformContent({
-    required this.platform,
-    required this.content,
-    required this.regenerated,
-  });
-
-  Map<String, dynamic> toJson() => {
-        'platform': platform,
-        'content': content,
-        'regenerated': regenerated,
-      };
 }
